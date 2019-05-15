@@ -2,17 +2,43 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse
-from rango.models import Category
+from rango.models import Category, Page
+from rango.forms import CategoryForm, PageForm
+from datetime import datetime
 
 def index(request):
     # Query the database for a list of ALL categories currently stored. # Order the categories by no. likes in descending order.
     # Retrieve the top 5 only - or all if less than 5.
     # Place the list in our context_dict dictionary
     # that will be passed to the template engine.
+    request.session.set_test_cookie()
     category_list = Category.objects.order_by('-likes')[:5]
-    context_dict = {'categories': category_list}
-    # Render the response and send it back!
-    return render(request, 'rango/index.html', context_dict)
+    page_list = Page.objects.order_by('-views')[:5]
+    context_dict = {'categories': category_list, 'pages': page_list}
+
+    # Call the helper function to call the cookies
+    visitor_cookie_handler(request)
+    context_dict['visits'] = request.session['visits']
+
+    # Obtain our Response object early so we can add cookie information.
+    response = render(request, 'rango/index.html', context_dict)
+
+    # Return response back to the user, updating any cookies that need change
+    return response
+
+def about(request):
+    # context_dict = {'boldmessage': "Crunchy, creamy, cookie, candy, cupcake!"}
+    # return render(request, 'rango/about.html', context=context_dict)
+    # if request.session.test_cookie_worked():
+    #     print("TEST COOKIE WORKED!")
+    #     request.session.delete_test_cookie()
+    # prints out whether the method is GET or POST
+    # print(request.method)
+    # prints out the user name, if no one is logged in, it prints 'AnonymousUser'
+    # print(request.user)
+
+    visitor_cookie_handler(request)
+    return render(request, 'rango/about.html', context={'visits': request.session['visits']})
 
 def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
@@ -44,3 +70,100 @@ def show_category(request, category_name_slug):
 
     # Go render the response and return it to the client.
     return render(request, 'rango/category.html', context_dict)
+
+def add_category(request):
+    form = CategoryForm()
+
+    # A HTTP POST?
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+
+        # Have we been provided with valid form?
+        if form.is_valid():
+            # Save the new category to the database
+            form.save(commit=True)
+            # Now that the category is saved
+            # We could give a confirmation message
+            # But since the most recent category added is on the index page # Then we can direct the user back to the index page.
+            return index(request)
+        else:
+            # The supplied form contained errors -
+            # # just print them to the terminal.
+            print(form.errors)
+
+    # Will handle the bad form, new form, or no form supplied cases.
+    # Render the form with error messages (if any).
+    return render(request, 'rango/add_category.html', {'form': form})
+
+
+def add_page(request, category_name_slug): 
+    try:
+        category = Category.objects.get(slug=category_name_slug)
+    except Category.DoesNotExist:
+        category = None
+
+    form = PageForm()
+    if request.method == 'POST':
+        form = PageForm(request.POST) 
+        if form.is_valid():
+            if category:
+                page = form.save(commit=False)
+                page.category = category
+                page.views = 0
+                page.save()
+                return show_category(request, category_name_slug)
+        else: 
+            print(form.errors)
+            
+    context_dict = {'form':form, 'category': category}
+    return render(request, 'rango/add_page.html', context_dict)
+
+# # Not technically a view, but a helper function
+# def visitor_cookie_handler(request, response):
+#     # Get the number of visits to the site.
+#     # We use the COOKIES.get() function to obtain the visits cookie.
+#     # If the cookie exists, the value returned is casted to an integer.
+#     # If the cookie doesn't exist, then the default value of 1 is used.
+#     visits = int(request.COOKIES.get('visits', '1'))
+    
+#     last_visit_cookie = request.COOKIES.get('last_visit', str(datetime.now()))
+#     last_visit_time = datetime.strptime(last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
+    
+#     # If it's been more than a day since the last visit...
+#     if (datetime.now() - last_visit_time).seconds > 0:
+#         visits = visits + 1
+#         # Update the last visit cookie now that we have updated the count
+#         response.set_cookie('last_visit', str(datetime.now()))
+#     else:
+#         # Set the last visit cookie
+#         response.set_cookie('last_visit', last_visit_cookie)
+    
+#     # Update/set the visits cookie
+#     response.set_cookie('visits', visits)
+
+# A helper method
+def get_server_side_cookie(request, cookie, default_val=None):
+    val = request.session.get(cookie)
+    if not val:
+        val = default_val
+    return val
+    
+def visitor_cookie_handler(request):
+    visits = int(get_server_side_cookie(request, 'visits', '1'))
+    last_visit_cookie = get_server_side_cookie(request,
+                                               'last_visit',
+                                               str(datetime.now()))
+    last_visit_time = datetime.strptime(last_visit_cookie[:-7],
+                                        '%Y-%m-%d %H:%M:%S')
+
+    # If it's been more than a day since the last visit...
+    if (datetime.now() - last_visit_time).days > 0:
+        visits = visits + 1
+        # update the last visit cookie now that we have updated the count
+        request.session['last_visit'] = str(datetime.now())
+    else:
+        # set the last visit cookie
+        request.session['last_visit'] = last_visit_cookie
+
+    # Update/set the visits cookie
+    request.session['visits'] = visits
