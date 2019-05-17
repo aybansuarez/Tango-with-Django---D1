@@ -26,7 +26,7 @@ from django.urls import reverse
 # Create a new class that redirects the user to the index page, #if successful at logging
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, user):
-        return reverse('index')
+        return reverse('rango:register_profile')
 
 urlpatterns = [
     path('', views.index, name='index'),

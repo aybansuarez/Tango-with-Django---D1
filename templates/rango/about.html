@@ -7,6 +7,9 @@
 
 {% block body_block %}
     <h3>Visits: {{ visits }}</h3>
+    <button class="btn btn-primary" onClick="alert('You clicked the button using inline javascript');">Click me</button>
+    <button class="btn btn-primary" id="about-btn"> Click Me - I'm JavaScript on Ice</button>
+    <div id="msg">Hello - I'm here for a JQuery Example too</div>
     <div class=”jumbotron p-4”>
             <div class=”container”>
                 <h1 class=”jumbotron-heading”>This tutorial has been put together</h1>
@@ -17,6 +20,6 @@
             </div>
         </div>
     <div>
-        <img src="/media/cat.jpg" alt="Picture of Rango" />
+        <img src="/media/cat.jpg" alt="Picture of Rango" width="200" />
     </div>
 {% endblock %}
