@@ -19,6 +19,11 @@
                 <div class="list-group">
                     {% for listuser in userprofile_list %}
                     <div class="list-group-item">
+                        {% if listuser.picture %}
+                        <img src="{{ MEDIA_URL }}{{ listuser.picture }}" width="100" height="100" alt="" /> <br/>
+                        {% else %}
+                        <img src="http://lorempixel.com/64/64/people/" width="100" height="100" alt="" /> <br/>
+                        {% endif %}
                         <h4 class="list-group-item-heading">
                             <a href="{% url 'rango:profile' listuser.user.username %}">{{ listuser.user.username }}</a>
                         </h4>

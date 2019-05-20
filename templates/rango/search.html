@@ -12,7 +12,11 @@
     <form class="form-inline" id="user_form" method="POST" action="{% url 'rango:search' %}">
         {% csrf_token %}
         <div class="form-group">
+            {% if query %}
             <input type="text" class="form-control" size="50" name="query" value="{{ query }}" id="query" />
+            {% else %}
+            <input type="text" class="form-control" size="50" name="query" placeholder="{{ query }}" id="query" />
+            {% endif %}
         </div>
         <button class="btn btn-primary" type="submit" name="submit" value="Search">Search</button>
     </form>
