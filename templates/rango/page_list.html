@@ -1,5 +1,5 @@
 {% if pages %}
-    <ul>
+    <ul id="pages" class="p-0">
         {% for page in pages %}
             <li class="list-group-item">
                 <a href="{% url 'rango:goto' %}?page_id={{ page.id }}">{{ page.title }}</a>
@@ -8,6 +8,7 @@
                 {% elif page.views == 1 %}
                     ({{ page.views }} view)
                 {% endif %}
+                <small class="d-block text-success">{{ page.url }}</small>
             </li>
         {% endfor %}
     </ul>

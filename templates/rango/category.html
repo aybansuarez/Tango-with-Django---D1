@@ -1,25 +1,40 @@
 {% extends 'rango/base.html' %}
 {% load staticfiles %}
 
-{% block title_block %}
+{% block title %}
     {{ category.name }}
 {% endblock %}
 
 {% block body_block %}
     {% if category %}
-        <h1 class="d-inline">{{ category.name }}</h1>
-        <a href="{% url 'rango:add_page' category.slug %}" class="btn btn-info btn-sm">Add a new page</a><br/>
-        <div class="mb-3">
+        <div class="container-fluid pt-4 pb-3">
+            <h1 class="m-0 mb-2">{{ category.name }}</h1>
             <strong id="like_count">{{ category.likes }}</strong> people like this category.
             {% if user.is_authenticated %}
             <button id="likes" data-catid="{{ category.id }}" class="btn btn-primary btn-sm" type="button">
-                <span data-feather="thumbs-up"></span>
-                Like
+                <i class="far fa-thumbs-up"></i> Like
             </button>
             {% endif %}
         </div>
+        {% if user.is_authenticated %}
+        <div class="container-fluid">
+            <a href="{% url 'rango:add_page' category.slug %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus p-1"></i> Add a new page
+            </a>
+            <form class="form-inline d-inline" id="user_form" method="POST" action="{% url 'rango:show_category' category.slug %}">
+                {% csrf_token %}
+                <input type="hidden" class="form-control rounded" size="50" name="query" value="{{ query }}" id="query">
+                <button class="btn btn-primary btn-sm" type="submit" name="submit">
+                        <i class="fas fa-search p-1"></i> Search for recommended pages.
+                </button>
+            </form>
+        </div>
+        {% endif %}
+ 
         {% if pages %}
-            <ul>
+        <div class="container-fluid mt-5 mb-2">
+            <h4 class="mb-3">{{ category.name }} pages</h4>
+            <ul id="pages" class="p-0">
                 {% for page in pages %}
                     <li class="list-group-item">
                         <a href="{% url 'rango:goto' %}?page_id={{ page.id }}">{{ page.title }}</a>
@@ -28,41 +43,35 @@
                         {% elif page.views == 1 %}
                             ({{ page.views }} view)
                         {% endif %}
+                        <small class="d-block text-success">{{ page.url }}</small>
                     </li>
                 {% endfor %}
             </ul>
+        </div>
         {% else %}
             <strong>No pages currently in category.</strong>
         {% endif %}
 
-        <div class="container">
-            {% if user.is_authenticated %}
-            <form class="form-inline" id="user_form" method="POST" action="{% url 'rango:show_category' category.slug %}">
-                {% csrf_token %}
-                <div class="form-group">
-                    <input type="text" class="form-control" size="40" name="query" value="{{ query }}" id="query" />
-                </div>
-                <button class="btn btn-primary" type="submit" name="submit" value="Search">Search</button>
-            </form>
-            {% endif %}
-        </div>
-        <div>
+        <div class="mt-5">
             {% if result_list %}
-            <h3>Result</h3>
-            <!-- Display search results in an ordered list -->
+            <h3>Results for "{{ query }}"</h3>
+            <hr>
             <div class="list-group">
                 {% for result in result_list %}
-                    <div class="list-group-item">
-                            {% if user.is_authenticated %}
-                            <button data-catid="{{category.id}}" data-title="{{ result.title }}"
-                                data-url="{{ result.link }}" 
-                                    class="rango-add btn btn-info btn-sm" type="button"><span data-feather="plus"></span>Add</button>
-                        {% endif %}
-                        <h4 class="list-group-item-heading">
-                            <a href="{{ result.link }}">{{ result.title }}</a>
-                        </h4>
-                        <p class="list-group-item-text">{{ result.summary }}</p>
+                <div class="row mb-4">
+                    {% if user.is_authenticated %}
+                    <div class="col-1 mr-3">
+                        <button data-catid="{{category.id}}" data-title="{{ result.title }}" data-url="{{ result.link }}" class="rango-add btn btn-info btn-sm" type="button">
+                            <span data-feather="plus"></span><span class="d-lg-inline d-none">Add</span>
+                        </button>
                     </div>
+                    {% endif %}
+                    <div class="col text-left">
+                        <h5 class="m-0 text-primary"><a href="{{ result.link }}">{{ result.title|safe|escape }}</a></h5>
+                        <small class="text-success">{{ result.link|safe|escape }}</small>
+                        <small class="d-block">{{ result.summary|safe|escape }}</small>
+                    </div>
+                </div>     
                 {% endfor %}
             </div>
             {% endif %}

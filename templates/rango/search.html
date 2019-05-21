@@ -1,40 +1,68 @@
 {% extends 'rango/base.html' %}
 {% load staticfiles %}
 
-{% block title_block %}
-    Search
+{% block title %}
+    {% if query %}
+        {{ query }}
+    {% else %}
+        Search
+    {% endif %}
 {% endblock %}
 
 {% block body_block %}
-<div>
-    <h1>Search with Rango</h1>
-    <br />
-    <form class="form-inline" id="user_form" method="POST" action="{% url 'rango:search' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            {% if query %}
-            <input type="text" class="form-control" size="50" name="query" value="{{ query }}" id="query" />
-            {% else %}
-            <input type="text" class="form-control" size="50" name="query" placeholder="{{ query }}" id="query" />
-            {% endif %}
+<div class="container-fluid">
+    <div class="row my-4">
+        <div id="searchWithRango" class="col">
+            <p class="d-inline align-middle">Search with</p>
+            <img src="/media/rango_logo.png" alt="rango_logo" width="100">
         </div>
-        <button class="btn btn-primary" type="submit" name="submit" value="Search">Search</button>
-    </form>
-
-    <div>
+    </div>
+    <div class="row my-4">
+        <div class="col">
+            <form class="form-inline" id="user_form" method="POST" action="{% url 'rango:search' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="input-group input-group-lg">
+                        {% if query %}
+                        <input type="text" class="form-control rounded" size="50" name="query" value="{{ query }}" id="query">
+                        {% else %}
+                        <input type="text" class="form-control rounded" size="50" name="query" placeholder="Search..." id="query">
+                        {% endif %}
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit" name="submit" value="Search">
+                                <i data-feather="search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="mt-5">
         {% if result_list %}
-        <h3>Results</h3>
-        <!-- Display search results in an ordered list -->
-        <div class="list-group">
+        <h3>Results for "{{ query }}"</h3>
+        <hr>
             {% for result in result_list %}
-            <div class="list-group-item">
-                <h4 class="list-group-item-heading">
-                    <a href="{{ result.link }}">{{ result.title|safe|escape }}</a>
-                </h4>
-                <p class="list-group-item-text">{{ result.summary|safe|escape }}</p>
+            <div id="searchResults" class="row mb-4">
+                <div class="col text-left">
+                    <h5 class="m-0 text-primary"><a href="{{ result.link }}">{{ result.title|safe|escape }}</a></h5>
+                    <small class="text-success">{{ result.link|safe|escape }}</small>
+                    <small class="d-block">{{ result.summary|safe|escape }}</small>
+                </div>
             </div>
             {% endfor %}
-        </div>
+        {% else %}
+            <hr>
+            <div id="noSearch" class="container text-center mb-4">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                        <img src="/media/rango_search.png" alt="rango_search_officer" class="img-fluid" width="350">
+                    </div>
+                    <div class="searchFor col-lg-6 col-md-12">
+                        <h3 class="d-inline">Search for a keyword</h3>
+                    </div>
+                </div>
+            </div>
         {% endif %}
     </div>
 </div>

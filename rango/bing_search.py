@@ -38,13 +38,16 @@ def run_query(search_terms):
     response.raise_for_status()
     search_results = response.json()
     results = []
-
-    for result in search_results["webPages"]["value"]:
-        results.append({
-            'title': result['name'],
-            'link': result['url'],
-            'summary': result['snippet']})
     
+    try:
+        for result in search_results["webPages"]["value"]:
+            results.append({
+                'title': result['name'],
+                'link': result['url'],
+                'summary': result['snippet']})
+    except KeyError:
+        pass
+
     return results
 
 def main():
