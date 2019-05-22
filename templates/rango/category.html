@@ -8,7 +8,7 @@
 {% block body_block %}
     {% if category %}
         <div class="container-fluid pt-4 pb-3">
-            <h1 class="m-0 mb-2">{{ category.name }}</h1>
+            <h1 class="m-0 mb-2">{% filter upper %}{{ category.name }}{% endfilter %}</h1>
             <strong id="like_count">{{ category.likes }}</strong> people like this category.
             {% if user.is_authenticated %}
             <button id="likes" data-catid="{{ category.id }}" class="btn btn-primary btn-sm" type="button">
@@ -25,16 +25,25 @@
                 {% csrf_token %}
                 <input type="hidden" class="form-control rounded" size="50" name="query" value="{{ query }}" id="query">
                 <button class="btn btn-primary btn-sm" type="submit" name="submit">
-                        <i class="fas fa-search p-1"></i> Search for recommended pages.
+                        <i class="fas fa-search p-1"></i> Search for pages
                 </button>
             </form>
         </div>
         {% endif %}
  
-        {% if pages %}
         <div class="container-fluid mt-5 mb-2">
-            <h4 class="mb-3">{{ category.name }} pages</h4>
-            <ul id="pages" class="p-0">
+            <h4 class="m-0">{{ category.name }} pages</h4>
+            <small>
+            {% if pages|length == 1 %}
+                <i class="fas fa-check"></i> {{ pages|length }} page available
+            {% elif pages|length > 1 %}
+                <i class="fas fa-check"></i> {{ pages|length }} pages available
+            {% else %}
+                No pages are currently in category.
+            {% endif %}
+            </small>
+            <ul id="pages" class="p-0 mt-3">
+            {% if pages %}
                 {% for page in pages %}
                     <li class="list-group-item">
                         <a href="{% url 'rango:goto' %}?page_id={{ page.id }}">{{ page.title }}</a>
@@ -46,11 +55,9 @@
                         <small class="d-block text-success">{{ page.url }}</small>
                     </li>
                 {% endfor %}
+            {% endif %}
             </ul>
         </div>
-        {% else %}
-            <strong>No pages currently in category.</strong>
-        {% endif %}
 
         <div class="mt-5">
             {% if result_list %}

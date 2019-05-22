@@ -19,4 +19,7 @@ $(document).ready(function() {
     $("#msg").html(msgstr)
   });
 
+  $(window).on('load',function(){
+    $('#myModal').modal('show');
+  });
 }); 

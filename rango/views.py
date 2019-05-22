@@ -33,6 +33,7 @@ def index(request):
 
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
+    context_dict['second_cats'] = Category.objects.all()
 
     response = render(request, 'rango/index.html', context=context_dict)
     return response
@@ -317,7 +318,7 @@ def like_category(request):
 def get_category_list(max_results=0, starts_with=''):
     cat_list = []
     if len(starts_with.strip())>0:
-        cat_list = Category.objects.filter(name__istartswith=starts_with)
+        cat_list = Category.objects.filter(name__contains=starts_with)
     
     if max_results > 0:
         if len(cat_list) > max_results:

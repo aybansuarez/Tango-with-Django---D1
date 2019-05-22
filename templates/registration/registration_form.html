@@ -1,41 +1,64 @@
 {% extends "rango/base.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
 {% block body_block %}
-<div class="jumbotron p-4">
-    <div class="container">
-        <h1 class="jumbotron-heading">Register Here</h1>
-    </div>
-</div>
-<div class="container">
-    <div class="row">
-        <div class="form-group" >
-            <form role="form" method="post" action=".">
-                {% csrf_token %}
-                <div class="form-group" >
-                    <p class="required">
-                        <label class="required" for="id_username">Username:</label>
-                        <input class="form-control" id="id_username" maxlength="30" name="username" type="text" />
-                        <span class="helptext">
-                            Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.
-                        </span>
-                    </p>
-                    <p class="required">
-                        <label class="required" for="id_email">E-mail:</label>
-                        <input class="form-control" id="id_email" name="email" type="email" />
-                    </p>
-                    <p class="required">
-                        <label class="required" for="id_password1">Password:</label>
-                        <input class="form-control" id="id_password1" name="password1" type="password" />
-                    </p>
-                    <p class="required">
-                        <label class="required" for="id_password2"> Password confirmation:</label>
-                        <input class="form-control" id="id_password2" name="password2" type="password" />
-                        <span class="helptext">
-                            Enter the same password as before, for verification.
-                        </span>
-                    </p>
+<div class="container py-5 my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-header bg-warning">Register</div>
+                <div class="card-body">
+                    <form method="POST" role="form" action=".">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label for="id_username" class="col-lg-4 col-form-label text-lg-right">Username</label>
+                            <div class="col-lg-6">
+                                <input id="id_username" type="text" class="form-control" name="username" maxlength="30" required autofocus>
+                                <small class="form-text text-muted">
+                                    Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.
+                                </small>
+                                <small class="text-danger">{{ form.errors.username|striptags }}</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id_email" class="col-lg-4 col-form-label text-lg-right">Email</label>
+                            <div class="col-lg-6">
+                                <input class="form-control" id="id_email" name="email" type="email">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id_password1" class="col-lg-4 col-form-label text-lg-right">Password</label>
+                            <div class="col-lg-6">
+                                <input id="id_password1" type="password" class="form-control" name="password1">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="id_password2" class="col-lg-4 col-form-label text-lg-right">Confirm Password</label>
+                            <div class="col-lg-6">
+                                <input id="id_password2" type="password" class="form-control" name="password2">
+                                <small class="form-text text-muted">
+                                    Enter the same password as before, for verification.
+                                </small>
+                                <small class="text-danger">{{ form.errors.password2|striptags }}</small>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <div class="col-lg-8 offset-lg-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Register
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-lg-8 offset-md-4">
+                                <small>Already a member? <a href="{% url 'auth_login' %}">Login</a></small>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>

@@ -18,9 +18,10 @@ html,body{
     font-size: 2.5rem!important;
 }
 
-#cats{
-    /* position: fixed; */
+main{
+    height: -webkit-calc(100% - 156px);
 }
+
 #cats .nav-item a{
     color: #3f3f3f;
     font-size: .9rem;
@@ -30,7 +31,7 @@ html,body{
     color: cornflowerblue!important;
     font-weight: 700;
 }
-
+/* */
 
 @media (min-width: 992px) {
     #searchResults{

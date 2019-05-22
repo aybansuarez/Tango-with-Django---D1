@@ -2,8 +2,8 @@
 
 {% load staticfiles %}
 
-{% block title_block %}
-    Index
+{% block title %}
+    Home
 {% endblock %}
 
 {% block body_block %}
@@ -61,6 +61,31 @@
             </div>
         </div>
     <div>
-        <img src="{% static "images/rango.jpg" %}" alt="Picture of Rango" />
+        <img src="{% static "images/rango.jpg" %}" alt="Picture of Rango" class="img-fluid">
+    </div>
+    <div class="row d-lg-none">
+    {% for cats in second_cats %}
+        <div class="col-6">
+            <a href="{% url 'rango:show_category' cats.slug %}">{{ cats.name }}</a>
+        </div>
+    {% endfor %}
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal fade" id="myModal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Rango says...</h5>
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button> -->
+                </div>
+                <div class="modal-body">
+                Howdy {{ user.username }}! Hey there, partner!
+                <strong>{{ boldmessage }}</strong>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
