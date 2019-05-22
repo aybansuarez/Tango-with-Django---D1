@@ -7,6 +7,11 @@ html,body{
     overflow-x: hidden;
 }
 
+#changeForm ul{
+    padding: 0;
+    margin-left: 25px;
+}
+
 .headeractive{
     color: #fff!important;
     font-weight: 900;
@@ -26,6 +31,7 @@ main{
     color: #3f3f3f;
     font-size: .9rem;
 }
+
 
 .active{
     color: cornflowerblue!important;

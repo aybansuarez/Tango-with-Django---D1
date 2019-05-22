@@ -1,7 +1,6 @@
 from django.urls import path
 from django.conf.urls import url
 from rango import views
-from rango import about
 from rango.views import AboutView, AddCategoryView, ProfileView
 
 app_name = 'rango'
