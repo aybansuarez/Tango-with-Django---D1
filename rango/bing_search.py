@@ -32,7 +32,7 @@ def run_query(search_terms):
     """
     bing_key = read_bing_key()
     search_url = 'https://api.cognitive.microsoft.com/bing/v7.0/search'
-    headers = {"Ocp-Apim-Subscription-Key" : 'e18525db2c474805870040eaa5a9c0d9'}
+    headers = {"Ocp-Apim-Subscription-Key" : bing_key}
     params  = {"q": search_terms, "textDecorations":True, "textFormat":"HTML"}
     response = requests.get(search_url, headers=headers, params=params)
     response.raise_for_status()
