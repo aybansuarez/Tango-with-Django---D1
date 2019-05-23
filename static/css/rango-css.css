@@ -12,9 +12,17 @@ html,body{
     margin-left: 25px;
 }
 
+.roundInp{
+    border-radius: 40px!important;
+}
+
 .headeractive{
     color: #fff!important;
     font-weight: 900;
+}
+
+#footerCats .link-item a{
+    color: #3f3f3f;
 }
 
 #searchWithRango{
@@ -38,10 +46,23 @@ main{
     font-weight: 700;
 }
 /* */
+p#mostLiked, p#mostViewed{
+    font-size: 2rem!important;
+}
+
+@media (min-width: 724px){
+    p#mostLiked, p#mostViewed{
+        font-size: 1.5rem!important;
+    }
+}
 
 @media (min-width: 992px) {
     #searchResults{
         width: 75%;
+    }
+
+    p#mostLiked, p#mostViewed{
+        font-size: 1.8rem!important;
     }
 
     #searchWithRango p{

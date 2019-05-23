@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views import View
+from django.db import IntegrityError
 from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm, UserProfileForm
 from datetime import datetime
@@ -142,16 +143,22 @@ class AddCategoryView(View):
     def post(self, request):
         form = CategoryForm()
         form = CategoryForm(request.POST)
-        if form.is_valid():
-            form.save(commit=True)
-            return index(request)
-        else:
-            print(form.errors)
+        message = "Category with this Name already exists."
+        try:
+            if form.is_valid():
+                form.save(commit=True)
+                return index(request)
+            else:
+                print(form.errors)
+        except IntegrityError as e:
+            return render(request, 'rango/add_category.html', {'form': form, 'message': message})
 
         return render(request, 'rango/add_category.html', {'form': form})
 
 @login_required
-def add_page(request, category_name_slug): 
+def add_page(request, category_name_slug):
+    message = "Invalid page title. Max of 128 characters only."
+
     try:
         category = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
@@ -159,16 +166,19 @@ def add_page(request, category_name_slug):
 
     form = PageForm()
     if request.method == 'POST':
-        form = PageForm(request.POST) 
-        if form.is_valid():
-            if category:
-                page = form.save(commit=False)
-                page.category = category
-                page.views = 0
-                page.save()
-                return show_category(request, category_name_slug)
-        else: 
-            print(form.errors)
+        form = PageForm(request.POST)
+        try:
+            if form.is_valid():
+                if category:
+                    page = form.save(commit=False)
+                    page.category = category
+                    page.views = 0
+                    page.save()
+                    return show_category(request, category_name_slug)
+            else: 
+                print(form.errors)
+        except:
+            pass
             
     context_dict = {'form':form, 'category': category}
     return render(request, 'rango/add_page.html', context_dict)

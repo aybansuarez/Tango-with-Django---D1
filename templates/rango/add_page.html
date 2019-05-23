@@ -4,12 +4,7 @@
 {% endblock %}
 
 {% block body_block %}
-<div class="jumbotron p-4">
-    <div class="container">
-        <h1 class="jumbotron-heading">Add Page to {{category.name}}</h1>
-    </div>
-</div>
-<div class="container">
+<!-- <div class="container">
     <div class="row">
         <form role="form" id="page_form" method="post" action="/rango/category/{{category.slug}}/add_page/">
             {% csrf_token %}
@@ -27,5 +22,31 @@
             <div class="p-5"></div>
         </form>
     </div>
-</div>
+</div> -->
+<div class="container py-5 mb-5">
+        <div class="bg-dark text-light row mb-5 mx-2 rounded">
+            <div class="col text-center py-3">
+                <h1>Add page to {{ category.name }}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <form id="page_form" role="form" method="POST" action="{% url 'rango:add_page' category.slug %}">
+                    {% csrf_token %}
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    <input type="text" id="id_title" name="title" maxlength="128" class="text-center form-control roundInp mt-3 p-4" placeholder="Page title">
+                    <small class="text-muted">{{ form.title.help_text }}</small>
+                    <input type="url" id="id_url" name="url" maxlength="200" class="text-center form-control roundInp mt-3 p-4" placeholder="http://">
+                    {% if form.errors %}
+                    <small class="text-danger">{{ form.url.errors|striptags }}</small>
+                    {% else %}
+                    <small class="text-muted">{{ form.url.help_text }}</small>
+                    {% endif %}
+                    <button class="d-block mx-auto mt-5 btn btn-success" type="submit" name="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -58,9 +58,9 @@
 
 		<div class="container-fluid p-0">
 			<div class="row">
-				<nav class="rangoSidebar col-lg-3 d-none d-lg-block bg-light sidebar p-0">
+				<nav class="rangoSidebar col-lg-3 d-none d-lg-block bg-light sidebar p-0 border-right border-warning">
 					<div>
-						<div class="container p-3 ">
+						<div class="container p-3">
 							<input type="search" class="form-control ml-2 mt-3" id="suggestion" placeholder="Search for a category...">
 						</div>
 						<div id="cats" class="py-2 px-3 d-flex">
@@ -71,10 +71,26 @@
 					</div>
 				</nav>
 				<main role="main" class="col-lg-9 ml-sm-auto px-4">		
-					{% block body_block %}{% endblock %}          
+					{% block body_block %}{% endblock %}
 				</main>
 			</div>
 			<!-- FOOTER -->
+			<footer id="footerOne" class="d-lg-none">
+				<a id="srzFooterToggler" class="bg-dark text-light mt-4 navbar d-lg-none mx-auto" data-toggle="collapse" data-target="#srzFooter">
+					<span class="mx-auto">CATEGORIES TAB</span>
+				</a>
+				<div class="collapse navbar-collapse" id="srzFooter">
+					<div class="container-fluid">
+						<div class="row p-4">
+							<div class="col-12">
+								<div class="container">
+									{% get_category_list category %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</footer>
 			<div id="footer" class="container-fluid px-0 py-3 bg-warning">
 				<footer class="row text-center">
 					<div class="col-lg-6 col-sm-12">

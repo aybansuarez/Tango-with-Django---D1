@@ -38,8 +38,6 @@
                 <i class="fas fa-check"></i> {{ pages|length }} page available
             {% elif pages|length > 1 %}
                 <i class="fas fa-check"></i> {{ pages|length }} pages available
-            {% else %}
-                No pages are currently in category.
             {% endif %}
             </small>
             <ul id="pages" class="p-0 mt-3">
@@ -55,6 +53,12 @@
                         <small class="d-block text-success">{{ page.url }}</small>
                     </li>
                 {% endfor %}
+            {% else %}
+            <small>
+                    No pages are currently in category.
+                    <div class="my-5 py-5"></div>
+                    <div class="my-5 py-5"></div>
+            </small>
             {% endif %}
             </ul>
         </div>
@@ -67,13 +71,13 @@
                 {% for result in result_list %}
                 <div class="row mb-4">
                     {% if user.is_authenticated %}
-                    <div class="col-1 mr-3">
+                    <div class="col-lg-1 ml-1 mr-lg-2 mr-3 col-1">
                         <button data-catid="{{category.id}}" data-title="{{ result.title }}" data-url="{{ result.link }}" class="rango-add btn btn-info btn-sm" type="button">
                             <span data-feather="plus"></span><span class="d-lg-inline d-none">Add</span>
                         </button>
                     </div>
                     {% endif %}
-                    <div class="col text-left">
+                    <div class="col-lg-8 col-9 text-left">
                         <h5 class="m-0 text-primary"><a href="{{ result.link }}">{{ result.title|safe|escape }}</a></h5>
                         <small class="text-success">{{ result.link|safe|escape }}</small>
                         <small class="d-block">{{ result.summary|safe|escape }}</small>

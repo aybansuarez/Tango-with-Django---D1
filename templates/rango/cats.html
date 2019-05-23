@@ -1,4 +1,4 @@
-<div id="catlst" class="mb-4">
+<div id="catlst" class="mb-4 d-lg-block d-none">
     <ul class="nav flex-column">
         {% if cats %}
             {% for c in cats %}
@@ -20,4 +20,23 @@
             <li class="nav-item">No Categories Yet!</li>
         {% endif %}
     </ul>
+</div>
+<div id="footerCats" class="row d-lg-none d-md-block">
+    {% for c in cats %}
+    <div class="col-6">
+        {% if c == act_cat %}
+            <ul class="list-unstyled">
+                <li class="link-item active">
+                    <i data-feather="archive"></i>&nbsp;&nbsp;<a href="{% url 'rango:show_category' c.slug %}">{{ c.name }}</a>
+                </li>
+            </ul>
+            {% else %}
+            <ul class="list-unstyled">
+                <li class="link-item">
+                    <i data-feather="archive"></i>&nbsp;&nbsp;<a href="{% url 'rango:show_category' c.slug %}">{{ c.name }}</a>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+    {% endfor %}
 </div>

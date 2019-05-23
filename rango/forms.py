@@ -13,8 +13,17 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = ('name',)
 
+    # def clean(self):
+    #     cleaned_data = self.cleaned_data
+    #     name = cleaned_data.get('name')
+
+    #     if name.islower():
+    #         name = name.capitalize()
+        
+    #     return cleaned_data
+
 class PageForm(forms.ModelForm):
-    title = forms.CharField(max_length=128, help_text="Please enter the title of the page.")
+    title = forms.CharField(max_length=128, help_text="Please enter the title of the page. \nMaximum of 128 characters only.")
     url = forms.URLField(max_length=200, help_text="Please enter the URL of the page.")
     views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
 

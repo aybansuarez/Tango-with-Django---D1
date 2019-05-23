@@ -6,28 +6,30 @@
 {% endblock %}
 
 {% block body_block %}
-    <div class="jumbotron p-4">
-        <div class="container">
-            <h1 class="jumbotron-heading">Add Category</h1>
+<div class="container py-5 mb-5">
+    <div class="bg-dark text-light row mb-5 mx-2 rounded">
+        <div class="col text-center py-3">
+            <h1>Add Category</h1>
         </div>
     </div>
-    <div>
-        <form id="category_form" method="POST" action="{% url 'rango:add_category' %}">
-            {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            {% for field in form.visible_fields %}
-                {{ field.help_text }}<br />
-                {{ field }}<br />
-                {% if field.errors %}
-                <small class="text-danger">{{ field.errors|striptags}}</small>
-                {% endif %}
-                <div class="p-2"></div>
-            {% endfor %}
-            <br />
-            <button class="btn btn-success" type="submit" name="submit">Add Category</button>
-            <div class="p-5"></div>
-        </form>
+    <div class="row">
+        <div class="col text-center">
+            <form id="category_form" method="POST" action="{% url 'rango:add_category' %}">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                <input type="text" id="id_name" name="name" maxlength="128" class="text-center form-control roundInp mt-3 p-4" placeholder="---">
+                {% for field in form.visible_fields %}
+                    {% if field.errors or message %}
+                    <small class="text-danger">{{ field.errors|striptags }}{{ message }}</small>
+                    {% else %}
+                    <small class="text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                {% endfor %}
+                <button class="d-block mx-auto btn btn-success mt-5" type="submit" name="submit">Submit</button>
+            </form>
+        </div>
     </div>
+</div>
 {% endblock %}

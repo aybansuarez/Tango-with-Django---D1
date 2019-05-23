@@ -23,26 +23,26 @@
             <h1>{{ selecteduser.username }}</h1>
         </div>
         {% if selecteduser.username == user.username %}
-        <div class="col-md-8 mt-3">
-            <div class="container">
+        <div class="col-xl-8 col-lg-12 mt-3">
+            <div class="container text-lg-left text-center">
                 <form method="post" action="." enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="id_website">Website</label>
-                        <input id="id_website" class="form-control" type="url" name="website" value="{{ userprofile.website }}" style="border-radius: 40px;">
+                        <input id="id_website" class="form-control text-lg-left text-center roundInp" type="url" name="website" value="{{ userprofile.website }}">
                     </div>
                     <div class="form-group">
                         <label for="id_picture">Picture</label>
-                        <input id="id_picture" class="form-control" type="file" name="picture" style="border-radius: 40px;">
+                        <input id="id_picture" class="form-control roundInp" type="file" name="picture">
                     </div>
                     <a href="{% url 'auth_password_change' %}">Change password</a>
-                    <button type="submit" class="btn btn-primary mt-3 d-block" style="border-radius: 40px;">Update</button>
+                    <button type="submit" class="btn btn-primary mx-lg-0 mx-auto mt-3 d-block roundInp">Update</button>
                 </form>
             </div>
         </div>
         {% else %}
         <div class="col-md-12 text-center">
-            <p class="border border-dark w-75 mx-auto p-3" style="border-radius: 40px;">
+            <p class="border border-dark w-75 mx-auto p-3 roundInp">
                 <a href="{{userprofile.website}}" target="_blank">{{userprofile.website}}</a>
             </p>
         </div>
