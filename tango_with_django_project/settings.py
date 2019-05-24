@@ -23,14 +23,14 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 key = None
-with open('/home/ivansrz/secret.key') as f:
+with open('secret.key') as f:
     key = f.read().strip()
 SECRET_KEY = key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['ivansrz.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
